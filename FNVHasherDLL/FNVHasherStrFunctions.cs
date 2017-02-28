@@ -220,5 +220,22 @@ namespace FNVHasherDLL
 
             return r;
         }
+
+        public static BigInteger hexToDecimal(String hexStr)
+        {
+            BigInteger r = BigInteger.Parse(
+                   "0" +
+                  hexStr.Replace("0x", "").Replace("0X", "")
+                   , NumberStyles.HexNumber);
+
+            return r;
+        }
+
+        public static String decimalToHex(String decimalStr)
+        {
+            String s = Convert.ToInt64(decimalStr).ToString("X");
+            s = "0x" + s;
+            return s;
+        }
     }
 }

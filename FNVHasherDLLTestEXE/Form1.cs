@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using FNVHasherDLL;
 using System.Numerics;
 using System.Globalization;
+using System.Diagnostics;
 
 namespace FNVHasherDLLTestEXE
 {
@@ -18,12 +19,14 @@ namespace FNVHasherDLLTestEXE
         public Form1()
         {
             InitializeComponent();
+
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            string version = fvi.FileVersion;
+
+            this.Text = this.Text + ", Version " + version;
+
             calc();
-        }
-
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -60,16 +63,6 @@ namespace FNVHasherDLLTestEXE
 
         }
 
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label5_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void fnv64highbitHex_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(fnv64highbitHex.Text);
@@ -99,11 +92,6 @@ namespace FNVHasherDLLTestEXE
         {
             Clipboard.SetText(fnv24Hex.Text);
             MessageBox.Show("Copied to clipboard!");
-        }
-
-        private void fnv64highbitDecimal_DoubleClick(object sender, EventArgs e)
-        {
-
         }
 
         private void fnv64highbitDecimal_Click(object sender, EventArgs e)
@@ -139,6 +127,26 @@ namespace FNVHasherDLLTestEXE
         private void button1_Click(object sender, EventArgs e)
         {
             calc();
+        }
+
+        private void convertedValue_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(convertedValue.Text);
+            MessageBox.Show("Copied to clipboard!");
+        }
+
+        private void valueToConvert_TextChanged(object sender, EventArgs e)
+        {
+            if (valueToConvert.Text.StartsWith("0x") ||
+                valueToConvert.Text.StartsWith("0X"))
+            {
+                BigInteger r = FNVHasherStrFunctions.hexToDecimal(valueToConvert.Text);
+                convertedValue.Text = r.ToString();
+            }
+            else
+            {
+                convertedValue.Text = FNVHasherStrFunctions.decimalToHex(valueToConvert.Text);
+            }
         }
     }
 }
